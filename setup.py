@@ -1,4 +1,8 @@
+import os
 import setuptools
+
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def read(fname):
@@ -7,7 +11,7 @@ def read(fname):
 
 
 install_requires = [
-    l for l in read('requirements.txt').splitlines()
+    l for l in read(os.path.join(dir_path, 'requirements.txt')).splitlines()
     if l and not l.startswith('#')]
 
 
