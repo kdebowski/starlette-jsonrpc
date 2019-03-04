@@ -13,7 +13,7 @@ install:
 
 script:
   - pytest
-  - coverage run tests.py
+  - pytest --cov=starlette_jsonrpc --cov=tests
 
 after_success:
   - codecov
