@@ -1,5 +1,10 @@
 # starlette-jsonrpc
 
+
+
+[![codecov](https://codecov.io/gh/kdebowski/starlette-jsonrpc/branch/master/graph/badge.svg?token=3DkWshhv8x)](https://codecov.io/gh/kdebowski/starlette-jsonrpc)
+
+
 ## todo:
 * Add examples to readme
 * add contribution guide to readme
