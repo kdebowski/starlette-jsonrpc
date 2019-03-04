@@ -1,9 +1,15 @@
+import functools
+
+
 class Dispatcher:
 
     def __init__(self):
         self.routes_map = {}
 
-    def add_method(self, method, name=None):
-        method_name = name if name else method.__name__
-        self.routes_map[method_name] = method
+    def add_method(self, method=None, name=None):
+
+        if name and not method:
+            return functools.partial(self.add_method, name=name)
+
+        self.routes_map[name or method.__name__] = method
         return method

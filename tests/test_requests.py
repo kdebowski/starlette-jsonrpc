@@ -12,7 +12,12 @@ app = Starlette()
 
 
 @dispatcher.add_method
-def my_method(request):
+def my_method(params):
+    return JSONResponse({'test': 'method'})
+
+
+@dispatcher.add_method(name='SecondMethod')
+def second_method(params):
     return JSONResponse({'test': 'method'})
 
 
@@ -31,6 +36,17 @@ payload = {
 
 
 def test_post_call_should_return_status_code_200():
+    response = client.post('/api/', json=payload)
+    assert response.status_code == 200
+
+
+def test_post_for_named_function_should_return_status_code_200():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "SecondMethod",
+        "params": [],
+        "id": 1
+    }
     response = client.post('/api/', json=payload)
     assert response.status_code == 200
 
