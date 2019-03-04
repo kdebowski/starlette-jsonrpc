@@ -6,7 +6,6 @@
 * add support guide to readme
 * add validation of requests
 * add tests for validation
-* add test coverage plugin
 * add namespaces
 * add guide how to install package
 * push package to pypi repository
