@@ -9,7 +9,6 @@ Thank you for your interest in contributing. Everyone is welcome to take part in
 
 ## todo:
 * Add examples to readme
-* add contribution guide to readme
 * add support guide to readme
 * add validation of requests
 * add tests for validation
