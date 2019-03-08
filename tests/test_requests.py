@@ -1,30 +1,4 @@
-from starlette.applications import Starlette
-from starlette.testclient import TestClient
-
-from starlette_jsonrpc import dispatcher
-from starlette_jsonrpc.endpoint import JSONRPCEndpoint
-
-
-# Startup
-
-app = Starlette()
-
-
-@dispatcher.add_method
-def substract(params):
-    return {'test': 'method'}
-
-
-@dispatcher.add_method(name='SubstractMethod')
-def second_method(params):
-    return {'test': 'method'}
-
-
-app.mount('/api', JSONRPCEndpoint)
-
-# Testing
-
-client = TestClient(app)
+from . import client
 
 
 def test_post_call_should_return_status_code_200():
@@ -116,27 +90,6 @@ def test_with_id_as_string_should_return_invalid_params_exception():
             "message": "Invalid params.",
             "data": {
                 "id": "Must be a string."
-            }
-        }
-    }
-
-
-def test_with_params_not_being_object_should_return_invalid_params_exception():
-    payload = {
-        "jsonrpc": "2.0",
-        "method": "substract",
-        "params": [],
-        "id": "1"
-    }
-    response = client.post('/api/', json=payload)
-    assert response.json() == {
-        "jsonrpc": "2.0",
-        "id": "1",
-        "error": {
-            "code": -32602,
-            "message": "Invalid params.",
-            "data": {
-                "params": "Must be an object."
             }
         }
     }
