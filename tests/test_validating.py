@@ -154,6 +154,46 @@ def test_with_not_registered_method_should_return_method_not_found():
     }
 
 
+def test_without_method_parameter():
+    payload = {
+        "jsonrpc": "2.0",
+        "params": {},
+        "id": "1"
+    }
+    response = client.post('/api/', json=payload)
+    assert response.json() == {
+        "jsonrpc": "2.0",
+        "id": "1",
+        "error": {
+            "code": -32602,
+            "message": "Invalid params.",
+            "data": {
+                "method": "This field is required."
+            }
+        }
+    }
+
+
+def test_with_empty_method_parameter():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "",
+        "params": {},
+        "id": "1"
+    }
+    response = client.post('/api/', json=payload)
+    assert response.json() == {
+        "jsonrpc": "2.0",
+        "id": "1",
+        "error": {
+            "code": -32602,
+            "message": "Invalid params.",
+            "data": {
+                "method": "Must not be blank."
+            }
+        }
+    }
+
 # def test_request_without_params_returns_200():
 #     payload = {
 #         "jsonrpc": "2.0",
@@ -164,8 +204,7 @@ def test_with_not_registered_method_should_return_method_not_found():
 #     assert response.status_code == 200
 #
 #
-# def test_without_method():
-#     pass
+
 #
 #
 # def test_id_must_be_string():
