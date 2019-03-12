@@ -12,12 +12,11 @@ app = Starlette()
 
 
 @dispatcher.add_method
-def my_method(request):
+def my_method(params):
     return JSONResponse({'test': 'method'})
 
 
 # Testing
-
 
 def test_adding_methods_to_dispatcher():
     func = dispatcher.routes_map.get('my_method')

@@ -27,7 +27,7 @@ def test_with_params_not_being_object_should_return_invalid_params_exception():
 # ID
 
 
-def test_with_id_as_string_should_return_invalid_params_exception():
+def test_with_id_as_int_should_return_invalid_params_exception():
     payload = {
         "jsonrpc": "2.0",
         "method": "substract",
@@ -43,6 +43,26 @@ def test_with_id_as_string_should_return_invalid_params_exception():
             "message": "Invalid params.",
             "data": {
                 "id": "Must be a string."
+            }
+        }
+    }
+
+
+def test_payload_without_id():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "substract",
+        "params": {}
+    }
+    response = client.post('/api/', json=payload)
+    assert response.json() == {
+        "jsonrpc": "2.0",
+        "id": "None",
+        "error": {
+            "code": -32602,
+            "message": "Invalid params.",
+            "data": {
+                "id": "This field is required."
             }
         }
     }
@@ -205,24 +225,9 @@ def test_with_empty_method_parameter():
 #
 #
 
-#
-#
-# def test_id_must_be_string():
-#     pass
-#
-
 
 # def test_with_method_name_starting_with_rpc_period():
 #     pass
 #
-#
-# def test_without_id():
-#     pass
-#
-#
 # def test_with_empty_id():
-#     pass
-#
-#
-# def test_without_params_ok():
 #     pass
