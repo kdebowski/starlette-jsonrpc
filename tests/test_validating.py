@@ -24,7 +24,24 @@ def test_with_params_not_being_object_should_return_invalid_params_exception():
         }
     }
 
+
+def test_request_without_params_returns_200():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "my_method",
+        "id": "1"
+    }
+    response = client.post('/api/', json=payload)
+    assert response.status_code == 200
+
+
 # ID
+
+# payload without id = notification
+
+#
+# def test_with_empty_id():
+#     pass
 
 
 def test_with_id_as_int_should_return_invalid_params_exception():
@@ -214,20 +231,8 @@ def test_with_empty_method_parameter():
         }
     }
 
-# def test_request_without_params_returns_200():
-#     payload = {
-#         "jsonrpc": "2.0",
-#         "method": "my_method",
-#         "id": "1"
-#     }
-#     response = client.post('/api/', json=payload)
-#     assert response.status_code == 200
-#
-#
 
 
 # def test_with_method_name_starting_with_rpc_period():
 #     pass
-#
-# def test_with_empty_id():
-#     pass
+
