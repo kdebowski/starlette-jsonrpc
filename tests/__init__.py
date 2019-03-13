@@ -9,12 +9,12 @@ app = Starlette()
 
 
 @dispatcher.add_method
-def substract(params):
+async def substract(params):
     return {'test': 'method'}
 
 
 @dispatcher.add_method(name='SubstractMethod')
-def second_method(params):
+async def second_method(params):
     return {'test': 'method'}
 
 

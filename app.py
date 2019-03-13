@@ -1,6 +1,5 @@
 import uvicorn
 from starlette.applications import Starlette
-from starlette.responses import JSONResponse
 
 from starlette_jsonrpc import dispatcher
 from starlette_jsonrpc.endpoint import JSONRPCEndpoint
@@ -8,14 +7,14 @@ from starlette_jsonrpc.endpoint import JSONRPCEndpoint
 app = Starlette()
 
 
-@app.route('/')
-def index(request):
-    return JSONResponse({'hello': 'world'})
-
-
 @dispatcher.add_method
-def substract(request):
-    return {'test': 'method'}
+async def subtract(params):
+    return {'result': params['x'] - params['y']}
+
+
+@dispatcher.add_method(name='SubtractMethod')
+async def seconds_subtract(params):
+    return {'result': params['x'] - params['y']}
 
 
 app.mount('/api', JSONRPCEndpoint)

@@ -38,7 +38,7 @@ class JSONRPCEndpoint(HTTPEndpoint):
         response = JSONRPCResponse.validate({
             "id": id,
             "jsonrpc": "2.0",
-            "result": dict(func(request))
+            "result": dict(await func(data.get('params')))
         })
         return dict(response)
 
