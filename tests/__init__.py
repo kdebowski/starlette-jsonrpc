@@ -13,9 +13,9 @@ async def subtract(params):
     return {'result': params['x'] - params['y']}
 
 
-@dispatcher.add_method(name='SubstractMethod')
+@dispatcher.add_method(name='SubtractMethod')
 async def second_method(params):
-    return {'test': 'method'}
+    return {'result': params['x'] - params['y']}
 
 
 app.mount('/api', JSONRPCEndpoint)

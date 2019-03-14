@@ -4,11 +4,12 @@ from . import client
 # PARAMS
 
 
+# todo: list shoudl be accepted
 def test_with_params_not_being_object_should_return_invalid_params_exception():
     payload = {
         "jsonrpc": "2.0",
-        "method": "substract",
-        "params": [],
+        "method": "subtract",
+        "params": '',
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -42,10 +43,7 @@ def test_with_empty_id_should_return_invalid_params_message():
     payload = {
         "jsonrpc": "2.0",
         "method": "subtract",
-        "params": {
-            "x": 42,
-            "y": 23
-        },
+        "params": {"x": 42, "y": 23},
         "id": ""
     }
     response = client.post('/api/', json=payload)
@@ -56,10 +54,7 @@ def test_with_id_as_integer_should_return_200():
     payload = {
         "jsonrpc": "2.0",
         "method": "subtract",
-        "params": {
-            "x": 42,
-            "y": 23
-        },
+        "params": {"x": 42, "y": 23},
         "id": 1
     }
     response = client.post('/api/', json=payload)
@@ -75,8 +70,8 @@ def test_with_id_as_integer_should_return_200():
 def test_payload_without_id():
     payload = {
         "jsonrpc": "2.0",
-        "method": "substract",
-        "params": {}
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
     }
     response = client.post('/api/', json=payload)
     assert response.status_code == 200
@@ -87,8 +82,8 @@ def test_payload_without_id():
 def test_with_jsonrpc_as_integer():
     payload = {
         "jsonrpc": 2,
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -108,8 +103,8 @@ def test_with_jsonrpc_as_integer():
 def test_with_empty_jsonrpc():
     payload = {
         "jsonrpc": "",
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -129,8 +124,8 @@ def test_with_empty_jsonrpc():
 def test_jsonrpc_wrong_value():
     payload = {
         "jsonrpc": "3.0",
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -149,8 +144,8 @@ def test_jsonrpc_wrong_value():
 
 def test_payload_without_jsonrpc():
     payload = {
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -173,7 +168,7 @@ def test_with_not_registered_method_should_return_method_not_found():
     payload = {
         "jsonrpc": "2.0",
         "method": "non_existing_method",
-        "params": {},
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -188,10 +183,10 @@ def test_with_not_registered_method_should_return_method_not_found():
     }
 
 
-def test_without_method_parameter():
+def test_without_method():
     payload = {
         "jsonrpc": "2.0",
-        "params": {},
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -208,11 +203,11 @@ def test_without_method_parameter():
     }
 
 
-def test_with_empty_method_parameter():
+def test_with_empty_method():
     payload = {
         "jsonrpc": "2.0",
         "method": "",
-        "params": {},
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)

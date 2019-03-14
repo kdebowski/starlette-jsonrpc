@@ -4,8 +4,8 @@ from . import client
 def test_post_call_should_return_status_code_200():
     payload = {
         "jsonrpc": "2.0",
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.post('/api/', json=payload)
@@ -15,8 +15,8 @@ def test_post_call_should_return_status_code_200():
 def test_post_for_named_function_should_return_status_code_200():
     payload = {
         "jsonrpc": "2.0",
-        "method": "SubstractMethod",
-        "params": {},
+        "method": "SubtractMethod",
+        "params": {"x": 42, "y": 23},
         "id": '1'
     }
     response = client.post('/api/', json=payload)
@@ -31,8 +31,8 @@ def test_get_call_should_return_method_not_allowed():
 def test_put_call_should_return_method_not_allowed():
     payload = {
         "jsonrpc": "2.0",
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.put('/api/', data=payload)
@@ -47,8 +47,8 @@ def test_delete_call_should_return_method_not_allowed():
 def test_patch_call_should_return_method_not_allowed():
     payload = {
         "jsonrpc": "2.0",
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {"x": 42, "y": 23},
         "id": "1"
     }
     response = client.patch('/api/', payload)
