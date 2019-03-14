@@ -38,29 +38,36 @@ def test_request_without_params_returns_200():
 # ID
 
 # payload without id = notification
-
-#
-# def test_with_empty_id():
-#     pass
-
-
-def test_with_id_as_int_should_return_invalid_params_exception():
+def test_with_empty_id_should_return_invalid_params_message():
     payload = {
         "jsonrpc": "2.0",
-        "method": "substract",
-        "params": {},
+        "method": "subtract",
+        "params": {
+            "x": 42,
+            "y": 23
+        },
+        "id": ""
+    }
+    response = client.post('/api/', json=payload)
+    assert response.status_code == 200
+
+
+def test_with_id_as_integer_should_return_200():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "subtract",
+        "params": {
+            "x": 42,
+            "y": 23
+        },
         "id": 1
     }
     response = client.post('/api/', json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
-        "id": "1",
-        "error": {
-            "code": -32602,
-            "message": "Invalid params.",
-            "data": {
-                "id": "Must be a string."
-            }
+        "id": 1,
+        "result": {
+            "result": 19
         }
     }
 
@@ -72,17 +79,7 @@ def test_payload_without_id():
         "params": {}
     }
     response = client.post('/api/', json=payload)
-    assert response.json() == {
-        "jsonrpc": "2.0",
-        "id": "None",
-        "error": {
-            "code": -32602,
-            "message": "Invalid params.",
-            "data": {
-                "id": "This field is required."
-            }
-        }
-    }
+    assert response.status_code == 200
 
 # JSONRPC
 

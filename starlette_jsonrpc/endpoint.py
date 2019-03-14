@@ -25,6 +25,10 @@ class JSONRPCEndpoint(HTTPEndpoint):
     async def _get_response(request):
         params = await request.json()
         id = params.get('id')
+
+        if not id or id == "":
+            return None
+
         data, errors = JSONRPCRequest.validate_or_error(params)
 
         if errors:
