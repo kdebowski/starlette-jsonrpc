@@ -20,17 +20,17 @@ app = Starlette()
 
 @dispatcher.add_method
 async def subtract(params):
-    return {'result': params['x'] - params['y']}
+    return {"result": params["x"] - params["y"]}
 
 
-@dispatcher.add_method(name='SubtractMethod')
+@dispatcher.add_method(name="SubtractMethod")
 async def seconds_subtract(params):
-    return {'result': params['x'] - params['y']}
+    return {"result": params["x"] - params["y"]}
 
 
-app.mount('/api', JSONRPCEndpoint)
+app.mount("/api", JSONRPCEndpoint)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     uvicorn.run(app)
 ```
 
@@ -38,25 +38,19 @@ Example of requests:
 
 ```json
 {
-	"jsonrpc": "2.0",
-	"method": "subtract",
-	"params": {
-		"x": 42, 
-		"y": 23
-	},
-	"id": "1"
+  "jsonrpc": "2.0",
+  "method": "subtract",
+  "params": {"x": 42, "y": 23},
+  "id": "1"
 }
 ```
 
 ```json
 {
-	"jsonrpc": "2.0",
-	"method": "SubtractMethod",
-	"params": {
-		"x": 42, 
-		"y": 23
-	},
-	"id": "1"
+  "jsonrpc": "2.0",
+  "method": "SubtractMethod",
+  "params": {"x": 42, "y": 23},
+  "id": "1"
 }
 ```
 
@@ -66,9 +60,7 @@ Example of response:
 {
   "jsonrpc": "2.0",
   "id": "1",
-  "result": {
-    "result": 19
-  }
+  "result": {"result": 19}
 }
 ```
 
