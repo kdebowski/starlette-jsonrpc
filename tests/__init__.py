@@ -10,14 +10,14 @@ app = Starlette()
 
 @dispatcher.add_method
 async def subtract(params):
-    return {'result': params['x'] - params['y']}
+    return {"result": params["x"] - params["y"]}
 
 
-@dispatcher.add_method(name='SubtractMethod')
+@dispatcher.add_method(name="SubtractMethod")
 async def second_method(params):
-    return {'result': params['x'] - params['y']}
+    return {"result": params["x"] - params["y"]}
 
 
-app.mount('/api', JSONRPCEndpoint)
+app.mount("/api", JSONRPCEndpoint)
 
 client = TestClient(app)

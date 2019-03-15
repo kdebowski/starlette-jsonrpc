@@ -13,7 +13,7 @@ from starlette_jsonrpc.endpoint import JSONRPCEndpoint
 app = Starlette()
 
 
-app.mount('/api', JSONRPCEndpoint)
+app.mount("/api", JSONRPCEndpoint)
 
 
 client = TestClient(app)

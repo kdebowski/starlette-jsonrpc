@@ -8,25 +8,29 @@ class ErrorSchema(typesystem.Schema):
 
 
 class JSONRPCRequest(typesystem.Schema):
-    jsonrpc = typesystem.String(pattern='2.0', trim_whitespace=False)
-    id = typesystem.Union(any_of=[
-        typesystem.String(allow_null=True, min_length=1, trim_whitespace=False),
-        typesystem.Integer(allow_null=True)]
+    jsonrpc = typesystem.String(pattern="2.0", trim_whitespace=False)
+    id = typesystem.Union(
+        any_of=[
+            typesystem.String(allow_null=True, min_length=1, trim_whitespace=False),
+            typesystem.Integer(allow_null=True),
+        ]
     )
     params = typesystem.Object(additional_properties=True)
     method = typesystem.String()
 
 
 class JSONRPCResponse(typesystem.Schema):
-    jsonrpc = typesystem.String(pattern='2.0', trim_whitespace=False)
-    id = typesystem.Union(any_of=[
-        typesystem.String(allow_null=True, min_length=1, trim_whitespace=False),
-        typesystem.Integer(allow_null=True)]
+    jsonrpc = typesystem.String(pattern="2.0", trim_whitespace=False)
+    id = typesystem.Union(
+        any_of=[
+            typesystem.String(allow_null=True, min_length=1, trim_whitespace=False),
+            typesystem.Integer(allow_null=True),
+        ]
     )
     result = typesystem.Object()
 
 
 class JSONRPCErrorResponse(typesystem.Schema):
-    jsonrpc = typesystem.String(pattern='2.0', trim_whitespace=False)
+    jsonrpc = typesystem.String(pattern="2.0", trim_whitespace=False)
     id = typesystem.String(trim_whitespace=False)
     error = typesystem.Reference(to=ErrorSchema)
