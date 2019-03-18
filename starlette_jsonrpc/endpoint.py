@@ -35,11 +35,19 @@ class JSONRPCEndpoint(HTTPEndpoint):
 
         method = data.get("method")
         func = dispatcher.routes_map.get(method)
+
         if not func:
             raise JSONRPCMethodNotFoundException(id)
 
+        params = data.get("params")
+
+        if isinstance(params, list):
+            result = dict(await func(*params))
+        else:
+            result = dict(await func(params))
+
         response = JSONRPCResponse.validate(
-            {"id": id, "jsonrpc": "2.0", "result": dict(await func(data.get("params")))}
+            {"id": id, "jsonrpc": "2.0", "result": result}
         )
         return dict(response)
 

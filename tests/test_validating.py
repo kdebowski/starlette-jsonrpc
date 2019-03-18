@@ -5,6 +5,12 @@ from . import client
 
 
 # todo: list shoudl be accepted
+def test_with_positional_parameters_should_return_positive_result():
+    payload = {"jsonrpc": "2.0", "method": "subtract_positional", "params": [42, 23], "id": "1"}
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": {"result": 19}}
+
+
 def test_with_params_not_being_object_should_return_invalid_params_exception():
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": "", "id": "1"}
     response = client.post("/api/", json=payload)
@@ -14,7 +20,7 @@ def test_with_params_not_being_object_should_return_invalid_params_exception():
         "error": {
             "code": -32602,
             "message": "Invalid params.",
-            "data": {"params": "Must be an object."},
+            "data": {"params": "Did not match any valid type."},
         },
     }
 

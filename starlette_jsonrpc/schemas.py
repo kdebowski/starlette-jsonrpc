@@ -15,7 +15,12 @@ class JSONRPCRequest(typesystem.Schema):
             typesystem.Integer(allow_null=True),
         ]
     )
-    params = typesystem.Object(additional_properties=True)
+    params = typesystem.Union(
+        any_of=[
+            typesystem.Object(additional_properties=True),
+            typesystem.Array()
+        ]
+    )
     method = typesystem.String()
 
 

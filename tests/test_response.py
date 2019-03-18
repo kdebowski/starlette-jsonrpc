@@ -7,17 +7,6 @@ from starlette.testclient import TestClient
 from starlette_jsonrpc import dispatcher
 
 
-# Startup
-from starlette_jsonrpc.endpoint import JSONRPCEndpoint
-
-app = Starlette()
-
-
-app.mount("/api", JSONRPCEndpoint)
-
-
-client = TestClient(app)
-
 # Testing
 
 
