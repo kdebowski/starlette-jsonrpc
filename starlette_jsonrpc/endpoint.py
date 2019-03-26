@@ -42,9 +42,17 @@ class JSONRPCEndpoint(HTTPEndpoint):
         params = data.get("params")
 
         if isinstance(params, list):
-            result = dict(await func(*params))
+            try:
+                result = dict(await func(*params))
+            except TypeError as e:
+                errors = {"params": f"{e}"}
+                raise JSONRPCInvalidParamsException(id, errors)
         else:
-            result = dict(await func(params))
+            try:
+                result = dict(await func(params))
+            except KeyError as e:
+                errors = {"params": f"Required param: {e}"}
+                raise JSONRPCInvalidParamsException(id, errors)
 
         response = JSONRPCResponse.validate(
             {"id": id, "jsonrpc": "2.0", "result": result}

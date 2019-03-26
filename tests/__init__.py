@@ -20,7 +20,7 @@ async def second_method(params):
 
 @dispatcher.add_method
 async def subtract_positional(x, y):
-    return {'result': x - y}
+    return {"result": x - y}
 
 
 app.mount("/api", JSONRPCEndpoint)
