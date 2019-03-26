@@ -64,7 +64,7 @@ Example of requests:
     "jsonrpc": "2.0",
     "method": "subtract_positional",
     "params": [42, 23],
-    "id": "1",
+    "id": "1"
 }
 ```
 
