@@ -26,6 +26,11 @@ async def subtract(params):
 @dispatcher.add_method(name="SubtractMethod")
 async def seconds_subtract(params):
     return {"result": params["x"] - params["y"]}
+    
+    
+@dispatcher.add_method
+async def subtract_positional(x, y):
+    return {"result": x - y}
 
 
 app.mount("/api", JSONRPCEndpoint)
@@ -54,6 +59,15 @@ Example of requests:
 }
 ```
 
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "subtract_positional",
+    "params": [42, 23],
+    "id": "1",
+}
+```
+
 Example of response:
 
 ```json
@@ -73,7 +87,6 @@ Thank you for your interest in contributing. Everyone is welcome to take part in
 If you like this project and find it useful and want to say "Thank you", please consider to [buy me a coffee](https://buymeacoff.ee/zRWISPHo0) ;)
 
 ## todo:
-* add tests for validation
 * add namespaces
 * add guide how to install package
 * push package to pypi repository
