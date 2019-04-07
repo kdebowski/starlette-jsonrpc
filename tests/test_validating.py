@@ -4,8 +4,22 @@ from . import client
 # JSON
 
 
-def test_empty_json():
+def test_payload_as_empty_dict():
     payload = {}
+    response = client.post("/api/", json=payload)
+    assert response.json() == {
+        "jsonrpc": "2.0",
+        "id": 'None',
+        "error": {
+            "code": -32602,
+            "message": "Invalid params.",
+            "data": {},
+        },
+    }
+
+
+def test_payload_as_empty_list():
+    payload = []
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
