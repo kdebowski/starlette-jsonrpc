@@ -1,10 +1,41 @@
 from . import client
 
 
+# JSON
+
+
+def test_empty_json():
+    payload = {}
+    response = client.post("/api/", json=payload)
+    assert response.json() == {
+        "jsonrpc": "2.0",
+        "id": 'None',
+        "error": {
+            "code": -32602,
+            "message": "Invalid params.",
+            "data": {},
+        },
+    }
+
+
+def test_incorrect_payload():
+    payload = [1]
+    response = client.post("/api/", json=payload)
+    assert response.json() == {
+        "jsonrpc": "2.0",
+        "id": 'None',
+        "error": {
+            "code": -32602,
+            "message": "Invalid params.",
+            "data": {},
+        },
+    }
+
+
 # PARAMS
 
 
-def test_with_positional_parameters_should_return_positive_result():
+def test_positional_parameters():
     payload = {
         "jsonrpc": "2.0",
         "method": "subtract_positional",
@@ -15,7 +46,18 @@ def test_with_positional_parameters_should_return_positive_result():
     assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": {"result": 19}}
 
 
-def test_with_params_not_being_object_should_return_invalid_params_exception():
+def test_named_parameters():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "SubtractMethod",
+        "params": {"x": 42, "y": 23},
+        "id": "1",
+    }
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": {"result": 19}}
+
+
+def test_params_not_object():
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": "", "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
@@ -29,7 +71,7 @@ def test_with_params_not_being_object_should_return_invalid_params_exception():
     }
 
 
-def test_with_invalid_object_params_should_return_list_of_valid_params():
+def test_params_as_invalid_object():
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {}, "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
@@ -43,7 +85,7 @@ def test_with_invalid_object_params_should_return_list_of_valid_params():
     }
 
 
-def test_with_invalid_list_params_should_return_list_of_valid_params():
+def test_params_as_invalid_list():
     payload = {"jsonrpc": "2.0", "method": "subtract_positional", "params": [1, ], "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
@@ -57,7 +99,7 @@ def test_with_invalid_list_params_should_return_list_of_valid_params():
     }
 
 
-def test_request_without_params_returns_200():
+def test_without_params():
     payload = {"jsonrpc": "2.0", "method": "my_method", "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.status_code == 200
@@ -65,45 +107,44 @@ def test_request_without_params_returns_200():
 
 # ID
 
-# payload without id = notification
-def test_with_empty_id_should_return_invalid_params_message():
-    payload = {
-        "jsonrpc": "2.0",
-        "method": "subtract",
-        "params": {"x": 42, "y": 23},
-        "id": "",
-    }
-    response = client.post("/api/", json=payload)
-    assert response.status_code == 200
-
-
-def test_with_id_as_integer_should_return_200():
-    payload = {
-        "jsonrpc": "2.0",
-        "method": "subtract",
-        "params": {"x": 42, "y": 23},
-        "id": 1,
-    }
+def test_id_as_integer():
+    payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": 1}
     response = client.post("/api/", json=payload)
     assert response.json() == {"jsonrpc": "2.0", "id": 1, "result": {"result": 19}}
 
 
-def test_payload_without_id():
+def test_id_as_string():
+    payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": "abc"}
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": "abc", "result": {"result": 19}}
+
+
+def test_id_as_null():
+    payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": None}
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": None, "result": {"result": 19}}
+
+
+def test_empty_id():
+    payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": ""}
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": None, "result": {"result": 19}}
+
+
+def test_without_id():
+    """
+    Notification
+    """
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}}
     response = client.post("/api/", json=payload)
-    assert response.status_code == 200
+    assert response.json() == {}
 
 
 # JSONRPC
 
 
-def test_with_jsonrpc_as_integer():
-    payload = {
-        "jsonrpc": 2,
-        "method": "subtract",
-        "params": {"x": 42, "y": 23},
-        "id": "1",
-    }
+def test_jsonrpc_as_integer():
+    payload = {"jsonrpc": 2, "method": "subtract", "params": {"x": 42, "y": 23}, "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
@@ -116,13 +157,8 @@ def test_with_jsonrpc_as_integer():
     }
 
 
-def test_with_empty_jsonrpc():
-    payload = {
-        "jsonrpc": "",
-        "method": "subtract",
-        "params": {"x": 42, "y": 23},
-        "id": "1",
-    }
+def test_empty_jsonrpc():
+    payload = {"jsonrpc": "", "method": "subtract", "params": {"x": 42, "y": 23}, "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
@@ -136,12 +172,7 @@ def test_with_empty_jsonrpc():
 
 
 def test_jsonrpc_wrong_value():
-    payload = {
-        "jsonrpc": "3.0",
-        "method": "subtract",
-        "params": {"x": 42, "y": 23},
-        "id": "1",
-    }
+    payload = {"jsonrpc": "3.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
@@ -154,7 +185,7 @@ def test_jsonrpc_wrong_value():
     }
 
 
-def test_payload_without_jsonrpc():
+def test_without_jsonrpc():
     payload = {"method": "subtract", "params": {"x": 42, "y": 23}, "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
@@ -171,13 +202,8 @@ def test_payload_without_jsonrpc():
 # METHOD
 
 
-def test_with_not_registered_method_should_return_method_not_found():
-    payload = {
-        "jsonrpc": "2.0",
-        "method": "non_existing_method",
-        "params": {"x": 42, "y": 23},
-        "id": "1",
-    }
+def test_not_registered_method():
+    payload = {"jsonrpc": "2.0", "method": "non_existing_method", "params": {"x": 42, "y": 23}, "id": "1"}
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
@@ -210,6 +236,20 @@ def test_with_empty_method():
             "code": -32602,
             "message": "Invalid params.",
             "data": {"method": "Must not be blank."},
+        },
+    }
+
+
+def test_method_as_integer():
+    payload = {"jsonrpc": "2.0", "method": 1, "params": {"x": 42, "y": 23}, "id": "1"}
+    response = client.post("/api/", json=payload)
+    assert response.json() == {
+        "jsonrpc": "2.0",
+        "id": "1",
+        "error": {
+            "code": -32602,
+            "message": "Invalid params.",
+            "data": {"method": "Must be a string."},
         },
     }
 

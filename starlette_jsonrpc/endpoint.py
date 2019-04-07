@@ -1,8 +1,10 @@
 from starlette.endpoints import HTTPEndpoint
+from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from starlette_jsonrpc import dispatcher
 from starlette_jsonrpc.exceptions import JSONRPCInvalidParamsException
+from starlette_jsonrpc.exceptions import JSONRPCInvalidRequestException
 from starlette_jsonrpc.exceptions import JSONRPCMethodNotFoundException
 from starlette_jsonrpc.schemas import JSONRPCErrorResponse
 from starlette_jsonrpc.schemas import JSONRPCRequest
@@ -17,16 +19,24 @@ class JSONRPCEndpoint(HTTPEndpoint):
             return self._get_exception_response(exc)
         except JSONRPCMethodNotFoundException as exc:
             return self._get_exception_response(exc)
+        except JSONRPCInvalidRequestException as exc:
+            return self._get_exception_response(exc)
 
         return JSONResponse(response)
 
-    @staticmethod
-    async def _get_response(request):
-        params = await request.json()
-        id = params.get("id")
+    async def _get_response(self, request: Request):
+        try:
+            params = await request.json()
+        except:
+            raise JSONRPCInvalidRequestException()
 
-        if not id or id == "":
-            return None
+        if not params or not isinstance(params, dict):
+            raise JSONRPCInvalidParamsException()
+
+        if self._is_notification(params):
+            return {}
+
+        id = params.get("id")
 
         data, errors = JSONRPCRequest.validate_or_error(params)
 
@@ -58,6 +68,12 @@ class JSONRPCEndpoint(HTTPEndpoint):
             {"id": id, "jsonrpc": "2.0", "result": result}
         )
         return dict(response)
+
+    @staticmethod
+    def _is_notification(params):
+        if all(k in params for k in ("jsonrpc", "method", "params")) and not "id" in params:
+            return True
+        return False
 
     @staticmethod
     def _get_exception_response(exc):

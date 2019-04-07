@@ -20,3 +20,8 @@ class JSONRPCMethodNotFoundException(JSONRPCException):
 class JSONRPCInvalidParamsException(JSONRPCException):
     CODE = -32602
     MESSAGE = "Invalid params."
+
+
+class JSONRPCInvalidRequestException(JSONRPCException):
+    CODE = -32600
+    MESSAGE = "Invalid Request."
