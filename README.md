@@ -89,5 +89,4 @@ If you like this project and find it useful and want to say "Thank you", please 
 ## todo:
 * add namespaces
 * add guide how to install package
-* push package to pypi repository
 * add type annotations
