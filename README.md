@@ -92,7 +92,3 @@ Thank you for your interest in contributing. Everyone is welcome to take part in
 ## Support
 
 If you like this project and find it useful and want to say "Thank you", please consider to [buy me a coffee](https://buymeacoff.ee/zRWISPHo0) ;)
-
-## todo:
-* add namespaces
-* add type annotations
