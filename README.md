@@ -4,6 +4,13 @@
 [![codecov](https://codecov.io/gh/kdebowski/starlette-jsonrpc/branch/master/graph/badge.svg?token=3DkWshhv8x)](https://codecov.io/gh/kdebowski/starlette-jsonrpc)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
+## Installation
+
+```bash
+pip install starlette-jsonrpc
+```
+
+
 ## Examples
 
 Code:
@@ -88,5 +95,4 @@ If you like this project and find it useful and want to say "Thank you", please 
 
 ## todo:
 * add namespaces
-* add guide how to install package
 * add type annotations
