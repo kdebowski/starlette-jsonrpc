@@ -1,8 +1,10 @@
 from starlette.endpoints import HTTPEndpoint
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from starlette.responses import Response
 
 from starlette_jsonrpc import dispatcher
+from starlette_jsonrpc.exceptions import JSONRPCException
 from starlette_jsonrpc.exceptions import JSONRPCInvalidParamsException
 from starlette_jsonrpc.exceptions import JSONRPCInvalidRequestException
 from starlette_jsonrpc.exceptions import JSONRPCMethodNotFoundException
@@ -12,7 +14,7 @@ from starlette_jsonrpc.schemas import JSONRPCResponse
 
 
 class JSONRPCEndpoint(HTTPEndpoint):
-    async def post(self, request):
+    async def post(self, request: Request) -> Response:
         try:
             response = await self._get_response(request)
         except JSONRPCInvalidParamsException as exc:
@@ -24,7 +26,7 @@ class JSONRPCEndpoint(HTTPEndpoint):
 
         return JSONResponse(response)
 
-    async def _get_response(self, request: Request):
+    async def _get_response(self, request: Request) -> dict:
         try:
             params = await request.json()
         except:
@@ -70,13 +72,13 @@ class JSONRPCEndpoint(HTTPEndpoint):
         return dict(response)
 
     @staticmethod
-    def _is_notification(params):
+    def _is_notification(params: dict) -> bool:
         if all(k in params for k in ("jsonrpc", "method", "params")) and not "id" in params:
             return True
         return False
 
     @staticmethod
-    def _get_exception_response(exc):
+    def _get_exception_response(exc: JSONRPCException) -> JSONResponse:
         response = JSONRPCErrorResponse.validate(
             {
                 "jsonrpc": "2.0",

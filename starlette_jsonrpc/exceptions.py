@@ -1,4 +1,7 @@
 class JSONRPCException(Exception):
+    CODE = None
+    MESSAGE = None
+
     def __init__(self, id: str = None, errors: dict = None) -> None:
         self._id = id
         self._errors = errors or {}
