@@ -46,7 +46,7 @@ class JSONRPCEndpoint(HTTPEndpoint):
             raise JSONRPCInvalidParamsException(id, errors)
 
         method = data.get("method")
-        func = dispatcher.routes_map.get(method)
+        func = dispatcher.methods_map.get(method)
 
         if not func:
             raise JSONRPCMethodNotFoundException(id)
