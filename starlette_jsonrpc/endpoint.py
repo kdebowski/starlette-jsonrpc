@@ -55,13 +55,13 @@ class JSONRPCEndpoint(HTTPEndpoint):
 
         if isinstance(params, list):
             try:
-                result = dict(await func(*params))
+                result = await func(*params)
             except TypeError as e:
                 errors = {"params": f"{e}"}
                 raise JSONRPCInvalidParamsException(id, errors)
         else:
             try:
-                result = dict(await func(params))
+                result = await func(params)
             except KeyError as e:
                 errors = {"params": f"Required param: {e}"}
                 raise JSONRPCInvalidParamsException(id, errors)

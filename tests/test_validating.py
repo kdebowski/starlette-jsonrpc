@@ -57,7 +57,7 @@ def test_positional_parameters():
         "id": "1",
     }
     response = client.post("/api/", json=payload)
-    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": {"result": 19}}
+    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": 19}
 
 
 def test_named_parameters():
@@ -68,7 +68,18 @@ def test_named_parameters():
         "id": "1",
     }
     response = client.post("/api/", json=payload)
-    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": {"result": 19}}
+    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": 19}
+
+
+def test_named_parameters_2():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "sum",
+        "params": {"x": 42, "y": 23},
+        "id": "1",
+    }
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": {"sum": 65}}
 
 
 def test_params_not_object():
@@ -124,25 +135,25 @@ def test_without_params():
 def test_id_as_integer():
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": 1}
     response = client.post("/api/", json=payload)
-    assert response.json() == {"jsonrpc": "2.0", "id": 1, "result": {"result": 19}}
+    assert response.json() == {"jsonrpc": "2.0", "id": 1, "result": 19}
 
 
 def test_id_as_string():
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": "abc"}
     response = client.post("/api/", json=payload)
-    assert response.json() == {"jsonrpc": "2.0", "id": "abc", "result": {"result": 19}}
+    assert response.json() == {"jsonrpc": "2.0", "id": "abc", "result": 19}
 
 
 def test_id_as_null():
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": None}
     response = client.post("/api/", json=payload)
-    assert response.json() == {"jsonrpc": "2.0", "id": None, "result": {"result": 19}}
+    assert response.json() == {"jsonrpc": "2.0", "id": None, "result": 19}
 
 
 def test_empty_id():
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}, "id": ""}
     response = client.post("/api/", json=payload)
-    assert response.json() == {"jsonrpc": "2.0", "id": None, "result": {"result": 19}}
+    assert response.json() == {"jsonrpc": "2.0", "id": None, "result": 19}
 
 
 def test_without_id():

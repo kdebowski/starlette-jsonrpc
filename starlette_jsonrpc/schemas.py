@@ -29,7 +29,7 @@ class JSONRPCResponse(typesystem.Schema):
             typesystem.Integer(allow_null=True),
         ]
     )
-    result = typesystem.Object()
+    result = typesystem.Any()
 
 
 class JSONRPCErrorResponse(typesystem.Schema):
