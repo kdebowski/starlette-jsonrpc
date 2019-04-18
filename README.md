@@ -27,17 +27,17 @@ app = Starlette()
 
 @dispatcher.add_method
 async def subtract(params):
-    return {"result": params["x"] - params["y"]}
+    return params["x"] - params["y"]
 
 
 @dispatcher.add_method(name="SubtractMethod")
 async def seconds_subtract(params):
-    return {"result": params["x"] - params["y"]}
-    
-    
+    return params["x"] - params["y"]
+
+
 @dispatcher.add_method
 async def subtract_positional(x, y):
-    return {"result": x - y}
+    return x - y
 
 
 app.mount("/api", JSONRPCEndpoint)
@@ -81,7 +81,7 @@ Example of response:
 {
   "jsonrpc": "2.0",
   "id": "1",
-  "result": {"result": 19}
+  "result": 19
 }
 ```
 
