@@ -2,7 +2,6 @@ import functools
 
 
 class Dispatcher:
-
     def __init__(self):
         self.methods_map = {}
 

@@ -73,7 +73,10 @@ class JSONRPCEndpoint(HTTPEndpoint):
 
     @staticmethod
     def _is_notification(params: dict) -> bool:
-        if all(k in params for k in ("jsonrpc", "method", "params")) and not "id" in params:
+        if (
+            all(k in params for k in ("jsonrpc", "method", "params"))
+            and not "id" in params
+        ):
             return True
         return False
 
