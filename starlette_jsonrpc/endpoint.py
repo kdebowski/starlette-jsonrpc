@@ -4,6 +4,7 @@ from starlette.responses import JSONResponse
 from starlette.responses import Response
 
 from starlette_jsonrpc import dispatcher
+from starlette_jsonrpc.constants import JSONRPC_VERSION
 from starlette_jsonrpc.exceptions import JSONRPCException
 from starlette_jsonrpc.exceptions import JSONRPCInvalidParamsException
 from starlette_jsonrpc.exceptions import JSONRPCInvalidRequestException
@@ -28,19 +29,21 @@ class JSONRPCEndpoint(HTTPEndpoint):
 
     async def _get_response(self, request: Request) -> dict:
         try:
-            params = await request.json()
+            req = await request.json()
         except:
             raise JSONRPCInvalidRequestException()
 
-        if not params or not isinstance(params, dict):
-            raise JSONRPCInvalidParamsException()
+        if not self._valid_request(req):
+            raise JSONRPCInvalidRequestException()
 
-        if self._is_notification(params):
+        if not req:
+            raise JSONRPCInvalidRequestException()
+
+        if self._is_notification(req):
             return {}
 
-        id = params.get("id")
-
-        data, errors = JSONRPCRequest.validate_or_error(params)
+        data, errors = JSONRPCRequest.validate_or_error(req)
+        id = req.get('id')
 
         if errors:
             raise JSONRPCInvalidParamsException(id, errors)
@@ -59,17 +62,28 @@ class JSONRPCEndpoint(HTTPEndpoint):
             except TypeError as e:
                 errors = {"params": f"{e}"}
                 raise JSONRPCInvalidParamsException(id, errors)
-        else:
+        elif isinstance(params, dict):
             try:
                 result = await func(params)
             except KeyError as e:
                 errors = {"params": f"Required param: {e}"}
                 raise JSONRPCInvalidParamsException(id, errors)
+        else:
+            raise JSONRPCInvalidRequestException()
 
         response = JSONRPCResponse.validate(
-            {"id": id, "jsonrpc": "2.0", "result": result}
+            {"id": id, "jsonrpc": JSONRPC_VERSION, "result": result}
         )
         return dict(response)
+
+    @staticmethod
+    def _valid_request(params) -> bool:
+        if isinstance(params, dict):
+            return True
+        if isinstance(params, list):
+            if all([isinstance(elem, dict) for elem in params]):
+                return True
+        return False
 
     @staticmethod
     def _is_notification(params: dict) -> bool:

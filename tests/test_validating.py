@@ -9,8 +9,12 @@ def test_payload_as_empty_dict():
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
-        "id": "None",
-        "error": {"code": -32602, "message": "Invalid params.", "data": {}},
+        "id": 'None',
+        "error": {
+            "code": -32600,
+            "message": "Invalid Request.",
+            "data": {},
+        },
     }
 
 
@@ -19,8 +23,12 @@ def test_payload_as_empty_list():
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
-        "id": "None",
-        "error": {"code": -32602, "message": "Invalid params.", "data": {}},
+        "id": 'None',
+        "error": {
+            "code": -32600,
+            "message": "Invalid Request.",
+            "data": {},
+        },
     }
 
 
@@ -29,8 +37,12 @@ def test_incorrect_payload():
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
-        "id": "None",
-        "error": {"code": -32602, "message": "Invalid params.", "data": {}},
+        "id": 'None',
+        "error": {
+            "code": -32600,
+            "message": "Invalid Request.",
+            "data": {},
+        },
     }
 
 
