@@ -29,11 +29,6 @@ async def subtract_positional(x, y):
 
 
 @dispatcher.add_method
-async def sum(x, y, z):
-    return {"result": x + y + z}
-
-
-@dispatcher.add_method
 async def get_data(params):
     return {"result": ["hello", 5]}
 
