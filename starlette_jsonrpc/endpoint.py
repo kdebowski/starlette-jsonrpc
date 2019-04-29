@@ -43,7 +43,7 @@ class JSONRPCEndpoint(HTTPEndpoint):
             return {}
 
         data, errors = JSONRPCRequest.validate_or_error(req)
-        id = req.get('id')
+        id = req.get("id")
 
         if errors:
             raise JSONRPCInvalidParamsException(id, errors)
