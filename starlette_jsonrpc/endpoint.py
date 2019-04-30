@@ -61,20 +61,7 @@ class JSONRPCEndpoint(HTTPEndpoint):
 
         params = data.get("params")
 
-        if isinstance(params, list):
-            try:
-                result = await func(*params)
-            except TypeError as e:
-                errors = {"params": f"{e}"}
-                raise JSONRPCInvalidParamsException(id, errors)
-        elif isinstance(params, dict):
-            try:
-                result = await func(params)
-            except KeyError as e:
-                errors = {"params": f"Required param: {e}"}
-                raise JSONRPCInvalidParamsException(id, errors)
-        else:
-            raise JSONRPCInvalidRequestException()
+        result = await self._get_result(params, func, id)
 
         response = JSONRPCResponse.validate(
             {"id": id, "jsonrpc": JSONRPC_VERSION, "result": result}
@@ -95,6 +82,23 @@ class JSONRPCEndpoint(HTTPEndpoint):
         if all(k in req for k in ("jsonrpc", "method", "params")) and not "id" in req:
             return True
         return False
+
+    @staticmethod
+    async def _get_result(params, func, id: str = None) -> dict:
+        if isinstance(params, list):
+            try:
+                return await func(*params)
+            except TypeError as e:
+                errors = {"params": f"{e}"}
+                raise JSONRPCInvalidParamsException(id, errors)
+        elif isinstance(params, dict):
+            try:
+                return await func(params)
+            except KeyError as e:
+                errors = {"params": f"Required param: {e}"}
+                raise JSONRPCInvalidParamsException(id, errors)
+        else:
+            raise JSONRPCInvalidRequestException()
 
     @staticmethod
     def _get_exception_response(exc: JSONRPCException) -> JSONResponse:
