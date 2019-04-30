@@ -32,6 +32,11 @@ class JSONRPCResponse(typesystem.Schema):
     result = typesystem.Any()
 
 
+class JSONRPCNotificationResponse(typesystem.Schema):
+    jsonrpc = typesystem.String(pattern="2.0", trim_whitespace=False)
+    method = typesystem.String()
+
+
 class JSONRPCErrorResponse(typesystem.Schema):
     jsonrpc = typesystem.String(pattern="2.0", trim_whitespace=False)
     id = typesystem.String(trim_whitespace=False)

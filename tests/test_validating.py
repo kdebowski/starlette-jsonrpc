@@ -9,12 +9,8 @@ def test_payload_as_empty_dict():
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
-        "id": 'None',
-        "error": {
-            "code": -32600,
-            "message": "Invalid Request.",
-            "data": {},
-        },
+        "id": "None",
+        "error": {"code": -32600, "message": "Invalid Request.", "data": {}},
     }
 
 
@@ -23,12 +19,8 @@ def test_payload_as_empty_list():
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
-        "id": 'None',
-        "error": {
-            "code": -32600,
-            "message": "Invalid Request.",
-            "data": {},
-        },
+        "id": "None",
+        "error": {"code": -32600, "message": "Invalid Request.", "data": {}},
     }
 
 
@@ -37,12 +29,8 @@ def test_incorrect_payload():
     response = client.post("/api/", json=payload)
     assert response.json() == {
         "jsonrpc": "2.0",
-        "id": 'None',
-        "error": {
-            "code": -32600,
-            "message": "Invalid Request.",
-            "data": {},
-        },
+        "id": "None",
+        "error": {"code": -32600, "message": "Invalid Request.", "data": {}},
     }
 
 
@@ -60,6 +48,17 @@ def test_positional_parameters():
     assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": 19}
 
 
+def test_positional_parameters_2():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "subtract_positional",
+        "params": [23, 42],
+        "id": "1",
+    }
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": -19}
+
+
 def test_named_parameters():
     payload = {
         "jsonrpc": "2.0",
@@ -72,6 +71,17 @@ def test_named_parameters():
 
 
 def test_named_parameters_2():
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "SubtractMethod",
+        "params": {"y": 23, "x": 42},
+        "id": "1",
+    }
+    response = client.post("/api/", json=payload)
+    assert response.json() == {"jsonrpc": "2.0", "id": "1", "result": 19}
+
+
+def test_named_parameters_3():
     payload = {
         "jsonrpc": "2.0",
         "method": "sum",
@@ -184,13 +194,13 @@ def test_empty_id():
     assert response.json() == {"jsonrpc": "2.0", "id": None, "result": 19}
 
 
-def test_without_id():
+def test_notification():
     """
     Notification
     """
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}}
     response = client.post("/api/", json=payload)
-    assert response.json() == {}
+    assert response.json() == {"jsonrpc": "2.0", "method": "subtract"}
 
 
 # JSONRPC

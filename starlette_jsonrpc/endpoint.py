@@ -10,6 +10,7 @@ from starlette_jsonrpc.exceptions import JSONRPCInvalidParamsException
 from starlette_jsonrpc.exceptions import JSONRPCInvalidRequestException
 from starlette_jsonrpc.exceptions import JSONRPCMethodNotFoundException
 from starlette_jsonrpc.schemas import JSONRPCErrorResponse
+from starlette_jsonrpc.schemas import JSONRPCNotificationResponse
 from starlette_jsonrpc.schemas import JSONRPCRequest
 from starlette_jsonrpc.schemas import JSONRPCResponse
 
@@ -40,7 +41,11 @@ class JSONRPCEndpoint(HTTPEndpoint):
             raise JSONRPCInvalidRequestException()
 
         if self._is_notification(req):
-            return {}
+            return dict(
+                JSONRPCNotificationResponse.validate(
+                    {"jsonrpc": req.get("jsonrpc"), "method": req.get("method")}
+                )
+            )
 
         data, errors = JSONRPCRequest.validate_or_error(req)
         id = req.get("id")
@@ -77,20 +82,17 @@ class JSONRPCEndpoint(HTTPEndpoint):
         return dict(response)
 
     @staticmethod
-    def _valid_request(params) -> bool:
-        if isinstance(params, dict):
+    def _valid_request(req) -> bool:
+        if isinstance(req, dict):
             return True
-        if isinstance(params, list):
-            if all([isinstance(elem, dict) for elem in params]):
+        if isinstance(req, list):
+            if all([isinstance(elem, dict) for elem in req]):
                 return True
         return False
 
     @staticmethod
-    def _is_notification(params: dict) -> bool:
-        if (
-            all(k in params for k in ("jsonrpc", "method", "params"))
-            and not "id" in params
-        ):
+    def _is_notification(req: dict) -> bool:
+        if all(k in req for k in ("jsonrpc", "method", "params")) and not "id" in req:
             return True
         return False
 
