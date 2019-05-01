@@ -200,7 +200,7 @@ def test_notification():
     """
     payload = {"jsonrpc": "2.0", "method": "subtract", "params": {"x": 42, "y": 23}}
     response = client.post("/api/", json=payload)
-    assert response.json() == {"jsonrpc": "2.0", "method": "subtract"}
+    assert response.json() == {}
 
 
 # JSONRPC

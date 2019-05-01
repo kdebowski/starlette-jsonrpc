@@ -41,11 +41,7 @@ class JSONRPCEndpoint(HTTPEndpoint):
             raise JSONRPCInvalidRequestException()
 
         if self._is_notification(req):
-            return dict(
-                JSONRPCNotificationResponse.validate(
-                    {"jsonrpc": req.get("jsonrpc"), "method": req.get("method")}
-                )
-            )
+            return {}
 
         data, errors = JSONRPCRequest.validate_or_error(req)
         id = req.get("id")
