@@ -1,3 +1,5 @@
+from json import JSONDecodeError
+
 from starlette.endpoints import HTTPEndpoint
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -9,8 +11,8 @@ from starlette_jsonrpc.exceptions import JSONRPCException
 from starlette_jsonrpc.exceptions import JSONRPCInvalidParamsException
 from starlette_jsonrpc.exceptions import JSONRPCInvalidRequestException
 from starlette_jsonrpc.exceptions import JSONRPCMethodNotFoundException
+from starlette_jsonrpc.exceptions import JSONRPCParseErrorException
 from starlette_jsonrpc.schemas import JSONRPCErrorResponse
-from starlette_jsonrpc.schemas import JSONRPCNotificationResponse
 from starlette_jsonrpc.schemas import JSONRPCRequest
 from starlette_jsonrpc.schemas import JSONRPCResponse
 
@@ -25,13 +27,17 @@ class JSONRPCEndpoint(HTTPEndpoint):
             return self._get_exception_response(exc)
         except JSONRPCInvalidRequestException as exc:
             return self._get_exception_response(exc)
+        except JSONRPCParseErrorException as exc:
+            return self._get_exception_response(exc)
 
         return JSONResponse(response)
 
     async def _get_response(self, request: Request) -> dict:
         try:
             req = await request.json()
-        except:
+        except JSONDecodeError:
+            raise JSONRPCParseErrorException()
+        except Exception:
             raise JSONRPCInvalidRequestException()
 
         if not self._valid_request(req):

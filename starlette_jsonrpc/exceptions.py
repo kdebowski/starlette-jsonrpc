@@ -28,3 +28,8 @@ class JSONRPCInvalidParamsException(JSONRPCException):
 class JSONRPCInvalidRequestException(JSONRPCException):
     CODE = -32600
     MESSAGE = "Invalid Request."
+
+
+class JSONRPCParseErrorException(JSONRPCException):
+    CODE = -32700
+    MESSAGE = "Parse error."
