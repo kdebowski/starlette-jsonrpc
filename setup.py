@@ -19,7 +19,7 @@ install_requires = [
 
 setuptools.setup(
     name="starlette-jsonrpc",
-    version="0.2.0",
+    version="0.2.1",
     author="Kamil Dębowski",
     author_email="poczta@kdebowski.pl",
     description="JSON-RPC implementation for Starlette framework",
