@@ -66,7 +66,7 @@ class JSONRPCEndpoint(HTTPEndpoint):
         result = await self._get_result(params, func, id)
 
         response = JSONRPCResponse.validate(
-            {"id": id, "jsonrpc": JSONRPC_VERSION, "result": result}
+            {"id": id, "jsonrpc": JSONRPC_VERSION, **result}
         )
         return dict(response)
 
