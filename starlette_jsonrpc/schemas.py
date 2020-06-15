@@ -29,7 +29,8 @@ class JSONRPCResponse(typesystem.Schema):
             typesystem.Integer(allow_null=True),
         ]
     )
-    result = typesystem.Any()
+    error = typesystem.Any(allow_null=True)
+    result = typesystem.Any(allow_null=True)
 
 
 class JSONRPCNotificationResponse(typesystem.Schema):
