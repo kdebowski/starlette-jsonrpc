@@ -88,7 +88,3 @@ Example of response:
 ## Contributing
 
 Thank you for your interest in contributing. Everyone is welcome to take part in developting this package. Please fFollow contributing guide in [CONTRIBUTING.md](https://github.com/kdebowski/starlette-jsonrpc/blob/master/CONTRIBUTING.md).
-
-## Support
-
-If you like this project and find it useful and want to say "Thank you", please consider to [buy me a coffee](https://buymeacoff.ee/zRWISPHo0) ;)
